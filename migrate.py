@@ -72,6 +72,8 @@ def create_table_if_not_exists(table_name):
     if not mapping:
         raise ValueError(f'Mapping not found for table: {table_name}')
 
+    print(f'Creating table if not exists: {table_name}')
+
     columns = ', '.join([f"{postgres_field['name']} {postgres_field['type']}" for postgres_field in mapping.values()])
     create_query = f'CREATE TABLE IF NOT EXISTS {snake_case_table_name} (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), {columns})'
     conn = psycopg2.connect(**HASURA_DB)
@@ -90,7 +92,9 @@ def create_table_if_not_exists(table_name):
 
 # Insert data into Hasura Postgres database
 def insert_into_postgres(table_name, records, drop_table_before_insert=False):
+    print(f'Migrating table: {table_name}')
     snake_case_table_name = to_snake_case(table_name)
+    
     # Get column mapping from config
     mapping = config['tables'].get(table_name)
     if not mapping:
@@ -125,18 +129,16 @@ def insert_into_postgres(table_name, records, drop_table_before_insert=False):
         raise e
     finally:
         cur.close()
+        print(f'Finished migrating table: {table_name}')
         conn.close()
 
 # Run migration
 def migrate():
     for table_name in config['tables'].keys():
-        print(f'Creating table if not exists: {table_name}')
         create_table_if_not_exists(table_name)
-        print(f'Migrating table: {table_name}')
         records = get_airtable_data(table_name)
         transformed_records = transform_data(table_name, records)
         insert_into_postgres(table_name, transformed_records, True)
-        print(f'Finished migrating table: {table_name}')
 
 if __name__ == '__main__':
     migrate()
