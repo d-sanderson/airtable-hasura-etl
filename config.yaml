@@ -1,37 +1,188 @@
 tables:
   exhibitions: 
-    Exhibition Title: title
-    Exhibition Slug: slug
-    exhibition_image_storage_urls: images
-    Exhibition Description: description
-    Opening Date: opening_date
-    Location: location
+    Exhibition Title: 
+      name: title
+      type: TEXT
+    Exhibition Slug: 
+      name: slug
+      type: TEXT
+    exhibition_image_storage_urls: 
+      name: images
+      type: TEXT
+    Exhibition Description: 
+      name: description
+      type: TEXT
+    Opening Date: 
+      name: opening_date
+      type: DATE
+    Location: 
+      name: location
+      type: TEXT
 
   Anchor Spaces: 
-    Anchor Space Title: title
-    Anchor Space Description: description
-    anchor_space_image_storage_urls: images
+    Anchor Space Title: 
+      name: title
+      type: TEXT
+    Anchor Space Description: 
+      name: description
+      type: TEXT
+    anchor_space_image_storage_urls: 
+      name: images
+      type: TEXT
+    Exhibition link: 
+      name: exhibition_id
+      type: TEXT
+    Exhibition (from Master IP): 
+      name: exhibition_name
+      type: TEXT
 
   projects: 
-    Project Title: title
-    Project Description (Final): description
-    project_image_storage_urls: images
+    Project Title: 
+      name: title
+      type: TEXT
+    Project Title Slug:
+      name: slug
+      type: TEXT
+    Project Description (Final): 
+      name: description
+      type: TEXT
+    project_image_storage_urls: 
+      name: images
+      type: TEXT
+    Anchor Space (from Master IP):
+      name: anchor_space
+      type: TEXT
+    Exhibition (from Anchor Space):
+      name: exhibition_id
+      type: TEXT
+    Exhibition (from Master IP):
+      name: exhibition_name
+      type: TEXT
 
   people:
-    Person: name
-    Slug: slug
-    team: Team
-    Bio: bio
-    headshot_image_storage_url: image
-    Company: company
-    Display Name: display_name
-    Email: email
-    First Name: first_name
-    Last Name: last_name
-    Concatenated Links: social_links
-    HoER Contributions: hoer_contributions
-    Omega Mart Contributions: omega_mart_contributions
-    Convergence Station Contributions: convergence_station_contributions
-    The Real Unreal Contributions: the_real_unreal_contributions
-    Radio Tave Contributions: radio_tave_contributions
-    Display On Site: display_on_site
+    Person: 
+      name: name
+      type: TEXT
+    Slug: 
+      name: slug
+      type: TEXT
+    Team: 
+      name: team
+      type: TEXT
+    Bio: 
+      name: bio
+      type: TEXT
+    headshot_image_storage_url: 
+      name: image
+      type: TEXT
+    Company: 
+      name: company
+      type: TEXT
+    Display Name: 
+      name: display_name
+      type: TEXT
+    Email: 
+      name: email
+      type: TEXT
+    First Name: 
+      name: first_name
+      type: TEXT
+    Last Name: 
+      name: last_name
+      type: TEXT
+    Concatenated Links: 
+      name: social_links
+      type: TEXT
+    HoER Contributions: 
+      name: hoer_contributions
+      type: TEXT
+    Omega Mart Contributions: 
+      name: omega_mart_contributions
+      type: TEXT
+    Convergence Station Contributions: 
+      name: convergence_station_contributions
+      type: TEXT
+    The Real Unreal Contributions: 
+      name: the_real_unreal_contributions
+      type: TEXT
+    Radio Tave Contributions: 
+      name: radio_tave_contributions
+      type: TEXT
+    Display on Site: 
+      name: display_on_site
+      type: BOOLEAN
+
+  Roles:
+    Role:
+      name: role
+      type: TEXT
+
+  Exhibition Content:
+    Exhibition Content Title:
+      name: title
+      type: TEXT
+    Exhibition Content Description:
+      name: description
+      type: TEXT
+    exhibition_content_image_storage_urls: 
+      name: images
+      type: TEXT
+    Location:
+      name: anchor_space
+      type: TEXT
+
+  Project Relationships:
+    Project Title: 
+      name: title
+      type: TEXT
+    Project Role (non linked):
+      name: role
+      type: TEXT
+    DisplayName:
+      name: person
+      type: TEXT
+    Acknowledgements (SF):
+      name: acknowledgements
+      type: TEXT
+
+  Exhibition Content Relationships:
+    Exhibition Content Piece Title: 
+      name: title
+      type: TEXT
+    Exhibition Content Role (non linked):
+      name: role
+      type: TEXT
+    DisplayName:
+      name: person
+      type: TEXT
+    Acknowledgements (SF):
+      name: acknowledgements
+      type: TEXT
+
+  Anchor Relationships:
+    Anchor Space Title: 
+      name: title
+      type: TEXT
+    Anchor Role (non linked):
+      name: role
+      type: TEXT
+    DisplayName:
+      name: person
+      type: TEXT
+    Acknowledgements (SF):
+      name: acknowledgements
+      type: TEXT
+
+  Exhibition Relationships:
+    Exhibition Title: 
+      name: title
+      type: TEXT
+    Exhibition Role (non linked):
+      name: role
+      type: TEXT
+    DisplayName:
+      name: person
+      type: TEXT
+    Acknowledgements (SF):
+      name: acknowledgements
+      type: TEXT
