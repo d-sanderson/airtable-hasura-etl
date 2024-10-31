@@ -1,22 +1,33 @@
 tables:
-  people:
-    Person: person_id
-    Profile Type: profile_type
-    Stacker Role: stacker_role
-    Collaboration/Collective: collaboration_collective
-    Alias: alias
-    Company: company
-    Display Name: display_name
-    Email: email
-    First Name: first_name
-    Last Name: last_name
-    Sync Source: sync_source
-    Exhibition Relationships: exhibition_relationships
-    Exhibition from Exhibition Relationships: exhibition_from_relationships
-    Exhibition Filters: exhibition_filters
-    Anchor Relationships: anchor_relationships
-    Anchor Exhibition: anchor_exhibition
-    Anchor Filters: anchor_filters
-    Project Relationships: project_relationships
-    Project Exhibition: project_exhibition
-    Project Filters: project_filters
+  exhibitions: 
+    Exhibition Title: title
+    Exhibition Slug: slug
+    exhibition_image_storage_urls: images
+    Exhibition Description: description
+    Opening Date: opening_date
+    Location: location
+  anchor spaces: 
+    Anchors Title: title
+  projects: 
+    Project Title: title
+  # people:
+  #   Person: person_id
+  #   Profile Type: profile_type
+  #   # Stacker Role: stacker_role
+  #   Collaboration/Collective: collaboration_collective
+  #   Alias: alias
+  #   Company: company
+  #   Display Name: display_name
+  #   Email: email
+  #   First Name: first_name
+  #   Last Name: last_name
+  #   Sync Source: sync_source
+  #   Exhibition Relationships: exhibition_relationships
+  #   Exhibition from Exhibition Relationships: exhibition_from_relationships
+  #   Exhibition Filters: exhibition_filters
+  #   Anchor Relationships: anchor_relationships
+  #   Anchor Exhibition: anchor_exhibition
+  #   Anchor Filters: anchor_filters
+  #   Project Relationships: project_relationships
+  #   Project Exhibition: project_exhibition
+  #   Project Filters: project_filters

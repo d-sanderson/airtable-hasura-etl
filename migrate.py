@@ -1,21 +1,20 @@
 import requests
 import psycopg2
 import yaml
-from dotenv import load_dotenv
+import urllib.parse as urlparse
 
-# Load environment variables from .env file
-load_dotenv()
+# Load environment variables into a dictionary
+with open('.env') as env_file:
+    env_vars = dict(line.strip().split('=') for line in env_file if line.strip() and not line.startswith('#'))
 
 # Load mapping configuration from config.yaml
 with open('config.yaml') as file:
     config = yaml.safe_load(file)
 
 # Airtable API configuration
-with open('.env') as env_file:
-    env_vars = dict(line.strip().split('=') for line in env_file if line.strip() and not line.startswith('#'))
-
 AIRTABLE_API_KEY = env_vars.get('AIRTABLE_API_KEY')
 AIRTABLE_BASE_ID = env_vars.get('AIRTABLE_BASE_ID')
+
 HEADERS = {
     'Authorization': f'Bearer {AIRTABLE_API_KEY}'
 }
@@ -67,11 +66,12 @@ def create_table_if_not_exists(table_name):
         raise ValueError(f'Mapping not found for table: {table_name}')
 
     columns = ', '.join([f"{postgres_field} TEXT" for postgres_field in mapping.values()])
-    create_query = f'CREATE TABLE IF NOT EXISTS {table_name} (id SERIAL PRIMARY KEY, {columns})'
-
+    create_query = f'CREATE TABLE IF NOT EXISTS {table_name} (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), {columns})'
     conn = psycopg2.connect(**HASURA_DB)
     cur = conn.cursor()
     try:
+        # Enable the uuid-ossp extension if it doesn't exist
+        cur.execute('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
         cur.execute(create_query)
         conn.commit()
     except Exception as e:
