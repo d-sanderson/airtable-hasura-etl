@@ -2,6 +2,8 @@ import requests
 import psycopg2
 import yaml
 import urllib.parse as urlparse
+import re
+
 
 # Load environment variables into a dictionary
 with open('.env') as env_file:
@@ -27,6 +29,12 @@ HASURA_DB = {
     'host': env_vars.get('HASURA_DB_HOST'),
     'port': env_vars.get('HASURA_DB_PORT')
 }
+
+
+def to_snake_case(name):
+    # Remove spaces and convert to snake case
+    name_no_spaces = name.replace(' ', '')
+    return re.sub(r'(?<!^)(?=[A-Z])', '_', name_no_spaces).lower()
 
 # Get data from Airtable
 def get_airtable_data(table_name):
@@ -61,12 +69,13 @@ def transform_data(table_name, records):
 
 # Create tables if they don't exist
 def create_table_if_not_exists(table_name):
+    snake_case_table_name = to_snake_case(table_name)
     mapping = config['tables'].get(table_name)
     if not mapping:
         raise ValueError(f'Mapping not found for table: {table_name}')
 
     columns = ', '.join([f"{postgres_field} TEXT" for postgres_field in mapping.values()])
-    create_query = f'CREATE TABLE IF NOT EXISTS {table_name} (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), {columns})'
+    create_query = f'CREATE TABLE IF NOT EXISTS {snake_case_table_name} (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), {columns})'
     conn = psycopg2.connect(**HASURA_DB)
     cur = conn.cursor()
     try:
@@ -82,17 +91,36 @@ def create_table_if_not_exists(table_name):
         conn.close()
 
 # Insert data into Hasura Postgres database
-def insert_into_postgres(table_name, records):
-    columns = config['tables'][table_name].values()
+def insert_into_postgres(table_name, records, drop_table_before_insert=False):
+    snake_case_table_name = to_snake_case(table_name)
+    # Get column mapping from config
+    mapping = config['tables'].get(table_name)
+    if not mapping:
+        raise ValueError(f'Mapping not found for table: {table_name}')
+    
+    columns = mapping.values()
     column_list = ', '.join(columns)
     placeholders = ', '.join(['%s' for _ in columns])
-    insert_query = f'INSERT INTO {table_name} ({column_list}) VALUES ({placeholders})'
+    insert_query = f'INSERT INTO {snake_case_table_name} ({column_list}) VALUES ({placeholders})'
 
     conn = psycopg2.connect(**HASURA_DB)
     cur = conn.cursor()
     try:
+        if drop_table_before_insert:
+            # Drop the table if it exists
+            print(f'Dropping table: {snake_case_table_name}')
+            drop_table_query = f'DROP TABLE IF EXISTS {snake_case_table_name}'
+            cur.execute(drop_table_query)
+
+            # Create the table again
+            create_columns = ', '.join([f"{postgres_field} TEXT" for postgres_field in mapping.values()])
+            create_query = f'CREATE TABLE {snake_case_table_name} (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), {create_columns})'
+            cur.execute(create_query)
+
+        # Insert records into the table
         for record in records:
             cur.execute(insert_query, tuple(record.values()))
+
         conn.commit()
     except Exception as e:
         conn.rollback()
@@ -109,7 +137,8 @@ def migrate():
         print(f'Migrating table: {table_name}')
         records = get_airtable_data(table_name)
         transformed_records = transform_data(table_name, records)
-        insert_into_postgres(table_name, transformed_records)
+        insert_into_postgres(table_name, transformed_records, True)
+        print(f'Finished migrating table: {table_name}')
 
 if __name__ == '__main__':
     migrate()

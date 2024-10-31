@@ -6,28 +6,32 @@ tables:
     Exhibition Description: description
     Opening Date: opening_date
     Location: location
-  anchor spaces: 
-    Anchors Title: title
+
+  Anchor Spaces: 
+    Anchor Space Title: title
+    Anchor Space Description: description
+    anchor_space_image_storage_urls: images
+
   projects: 
     Project Title: title
-  # people:
-  #   Person: person_id
-  #   Profile Type: profile_type
-  #   # Stacker Role: stacker_role
-  #   Collaboration/Collective: collaboration_collective
-  #   Alias: alias
-  #   Company: company
-  #   Display Name: display_name
-  #   Email: email
-  #   First Name: first_name
-  #   Last Name: last_name
-  #   Sync Source: sync_source
-  #   Exhibition Relationships: exhibition_relationships
-  #   Exhibition from Exhibition Relationships: exhibition_from_relationships
-  #   Exhibition Filters: exhibition_filters
-  #   Anchor Relationships: anchor_relationships
-  #   Anchor Exhibition: anchor_exhibition
-  #   Anchor Filters: anchor_filters
-  #   Project Relationships: project_relationships
-  #   Project Exhibition: project_exhibition
-  #   Project Filters: project_filters
+    Project Description (Final): description
+    project_image_storage_urls: images
+
+  people:
+    Person: name
+    Slug: slug
+    team: Team
+    Bio: bio
+    headshot_image_storage_url: image
+    Company: company
+    Display Name: display_name
+    Email: email
+    First Name: first_name
+    Last Name: last_name
+    Concatenated Links: social_links
+    HoER Contributions: hoer_contributions
+    Omega Mart Contributions: omega_mart_contributions
+    Convergence Station Contributions: convergence_station_contributions
+    The Real Unreal Contributions: the_real_unreal_contributions
+    Radio Tave Contributions: radio_tave_contributions
+    Display On Site: display_on_site
